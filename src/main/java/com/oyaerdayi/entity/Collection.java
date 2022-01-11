@@ -11,7 +11,7 @@ import java.util.Date;
 public class Collection {
 
 
-    @SequenceGenerator(name = "generator", sequenceName = "USER_ID_SEQ")
+    @SequenceGenerator(name = "generator", sequenceName = "COLLECTION_ID_SEQ")
     @Id
     @GeneratedValue(generator = "generator")
     @Column(name = "ID", nullable = false)

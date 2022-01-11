@@ -9,7 +9,7 @@ import java.util.Date;
 @Table(name ="LATE_FEE_RATE")
 public class LateFeeRate {
 
-    @SequenceGenerator(name = "generator", sequenceName = "USER_ID_SEQ")
+    @SequenceGenerator(name = "generator", sequenceName = "LATE_FEE_ID_SEQ")
     @Id
     @GeneratedValue(generator = "generator")
     @Column(name = "ID", nullable = false)

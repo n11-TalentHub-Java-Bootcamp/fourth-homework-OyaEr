@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 @Table(name="DEBT")
 public class Debt {
 
-    @SequenceGenerator(name = "generator", sequenceName = "USER_ID_SEQ")
+    @SequenceGenerator(name = "generator", sequenceName = "DEBT_ID_SEQ")
     @Id
     @GeneratedValue(generator = "generator")
     @Column(name = "ID", nullable = false)
