@@ -1,9 +1,8 @@
 package com.oyaerdayi.dao;
-
-import com.oyaerdayi.entity.User;
+import com.oyaerdayi.entity.Debt;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserDao extends JpaRepository<User,Long> {
+public interface DebtDao extends JpaRepository<Debt,Long> {
 }
