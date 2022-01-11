@@ -5,6 +5,9 @@ public class UserDto {
     private Long id;
     private String name;
     private String surname;
+    private String email;
+    private String phoneNumber;
+
 
     public UserDto(Long id, String name, String surname, String email, String phoneNumber) {
         this.id = id;
@@ -14,8 +17,6 @@ public class UserDto {
         this.phoneNumber = phoneNumber;
     }
 
-    private String email;
-    private String phoneNumber;
 
     public Long getId() {
         return id;
