@@ -16,10 +16,10 @@ public interface LateFeeRateConverter {
 
     LateFeeRate convertAllLateFeeRateDtoListToLateFeeRateList(LateFeeRateDto lateFeeRateDto);
 
-    @AfterMapping
-    default void setNulls(@MappingTarget LateFeeRate lateFeeRate, LateFeeRateDto lateFeeRateDto){
-        if (lateFeeRateDto.getId() == null){
-            lateFeeRate.setId(null);
-        }
-    }
+//    @AfterMapping
+//    default void setNulls(@MappingTarget LateFeeRate lateFeeRate, LateFeeRateDto lateFeeRateDto){
+//        if (lateFeeRateDto.getId() == null){
+//            lateFeeRate.setId(null);
+//        }
+//    }
 }

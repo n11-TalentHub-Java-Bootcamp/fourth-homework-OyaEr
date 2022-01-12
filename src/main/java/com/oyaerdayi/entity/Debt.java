@@ -1,11 +1,15 @@
 package com.oyaerdayi.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name="DEBT")
 public class Debt {
+
 
     @SequenceGenerator(name = "generator", sequenceName = "DEBT_ID_SEQ")
     @Id
@@ -14,7 +18,7 @@ public class Debt {
     private Long id;
 
     //ana borç tutarı, değiştirilemez olan!
-    @Column(name = "DEBT", precision = 19, scale = 2)
+    @Column(name = "DEBT_AMOUNT", precision = 19, scale = 2)
     private BigDecimal debtAmount;
 
     //Tahsilat sonrası kalan borç !
@@ -23,7 +27,15 @@ public class Debt {
 
     //vade tarihi alanı
     @Column(name = "DUE_DATE", nullable = false)
-    private String dueDate; //TODO: Date yapılabilir?
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date dueDate;
+
+
+    //Borcun hangi kullanıcıya ait olduğu bilgisi için.
+    @Column(name= "USER_ID", nullable = false)
+    private Long userId;
+
+
 
     //TODO: Gecikme zammı hesaplanacak, alan tutulacak "transient" olarak. vade tarihi geçince gecikme zammı eklenecek??
     //TODO: Gecikme zammının  hangi borca bağlı olduğu bilgisi burada tutulmalı.
@@ -52,12 +64,21 @@ public class Debt {
         this.remainingDebtAmount = remainingDebtAmount;
     }
 
-    public String getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(String dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -66,7 +87,10 @@ public class Debt {
                 "id=" + id +
                 ", debtAmount=" + debtAmount +
                 ", remainingDebtAmount=" + remainingDebtAmount +
-                ", dueDate='" + dueDate + '\'' +
+                ", dueDate=" + dueDate +
+                ", userId=" + userId +
                 '}';
     }
+
+
 }
