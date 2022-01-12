@@ -1,7 +1,6 @@
 package com.oyaerdayi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;

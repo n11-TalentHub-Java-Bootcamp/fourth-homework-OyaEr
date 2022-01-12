@@ -31,6 +31,11 @@ public class Collection {
     private Long debtId;
 
 
+    //Tahsilatın kim tarafından yapılacağı bilgisi için.
+    @Column(name = "USER_ID", nullable = false)
+    private Long userId;
+
+
 
     public Long getId() {
         return id;
@@ -64,6 +69,12 @@ public class Collection {
         this.debtId = debtId;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     @Override
     public String toString() {
@@ -72,6 +83,9 @@ public class Collection {
                 ", lateFee=" + lateFee +
                 ", recordDate=" + recordDate +
                 ", debtId=" + debtId +
+                ", userId=" + userId +
                 '}';
     }
+
+
 }

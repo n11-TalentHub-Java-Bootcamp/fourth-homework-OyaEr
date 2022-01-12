@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface DebtDao extends JpaRepository<Debt,Long> {
 
+    List<Debt> findAllByUserId(Long userId);
 
 }

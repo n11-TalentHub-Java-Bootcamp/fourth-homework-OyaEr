@@ -2,9 +2,7 @@ package com.oyaerdayi.converter;
 
 import com.oyaerdayi.dto.UserDto;
 import com.oyaerdayi.entity.User;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
