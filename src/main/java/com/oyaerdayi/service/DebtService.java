@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
@@ -137,12 +138,14 @@ public class DebtService {
 
     }
 
-    private String getTotalLateFeeByUserId(Long userId){
+    // Burası hesaplanırken vade tarihi 2018'den önce olanlar için 1.5 oran verilip hangi tarihte ödediyse o güne kadar
+    // hep 1.5 oran ile çarpılmıştır. 2018den sonrakiler içinse 2.0 oran verilip ödediği tarihe kadar 2.0 ile çarpılmıştır.
+    public String getTotalLateFeeByUserId(Long userId){
 
-        double lateFee=0; //gecikme zammı
-        long day=0;
-        BigDecimal totalDebt;
+        long milis=0;
+        BigDecimal lateFee= new BigDecimal(0);
         Date currentDate = new Date();
+
 
         try {
             SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
@@ -150,26 +153,35 @@ public class DebtService {
 
             List<Debt> debtList = debtDao.findAllByUserId(userId);
 
+
             for (Debt debt : debtList) {
-                if (debt.getDueDate().before(date)) {
 
-                    day= currentDate.getTime() - debt.getDueDate().getTime();
+                if(debt.getRemainingDebtAmount().compareTo(BigDecimal.ZERO) != 0){
 
-                    lateFee+ =((debt.getDebtAmount()*rateBefore2018)/100) * day;
+                if (debt.getDueDate().before(date)) { //2018'ten öncekiler için gecikme zammı
 
+                    milis = currentDate.getTime() - debt.getDueDate().getTime();
 
+                    long days = TimeUnit.MILLISECONDS.toDays(milis);
 
-
-
+                    lateFee = lateFee.add(((debt.getDebtAmount().multiply(new BigDecimal(rateBefore2018))).divide(new BigDecimal(100))).multiply(new BigDecimal(days)));
 
                 }
 
+                if (debt.getDueDate().after(date) && debt.getDueDate().before(new Date())) { //2018'ten sonra ama currentDate'ten önce vade tarihi
 
+                    milis = currentDate.getTime() - debt.getDueDate().getTime();
 
+                    long days = TimeUnit.MILLISECONDS.toDays(milis);
 
+                    lateFee = lateFee.add(((debt.getDebtAmount().multiply(new BigDecimal(rateAfter2018))).divide(new BigDecimal(100))).multiply(new BigDecimal(days)));
+
+                }
+            }
 
             }
-            return "Remaining Total Debt Out Of Due Date: " + totalDebt;
+
+            return "Total Late Fee: " + lateFee;
 
         }
         catch (Exception e){
