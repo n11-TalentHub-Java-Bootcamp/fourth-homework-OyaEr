@@ -17,11 +17,4 @@ public interface UserConverter {
 
     User convertAllUserDtoListToUserList(UserDto userDto);
 
-//    @AfterMapping
-//    default void setNulls(@MappingTarget User user, UserDto userDto){
-//        if (userDto.getId() == null){
-//            user.setId(null);
-//        }
-//    }
-
 }

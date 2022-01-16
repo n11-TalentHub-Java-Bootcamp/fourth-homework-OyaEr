@@ -2,18 +2,17 @@ package com.oyaerdayi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Table(name="DEBT")
-public class Debt {
+public class Debt implements Serializable {
 
-
-    @SequenceGenerator(name = "generator", sequenceName = "DEBT_ID_SEQ")
     @Id
-    @GeneratedValue(generator = "generator")
-    @Column(name = "ID", nullable = false)
+    @GeneratedValue
+    @Column(name = "ID")
     private Long id;
 
     //ana borç tutarı, değiştirilemez olan!
@@ -25,19 +24,41 @@ public class Debt {
     private BigDecimal remainingDebtAmount;
 
     //vade tarihi alanı
-    @Column(name = "DUE_DATE", nullable = false)
+    @Column(name = "DUE_DATE")
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date dueDate;
 
+    @Column (name="DEBT_TYPE ")
+    private String debtType;
 
-    //Borcun hangi kullanıcıya ait olduğu bilgisi için.
-    @Column(name= "USER_ID", nullable = false)
-    private Long userId;
+    @OneToOne(
+            fetch = FetchType.LAZY
+//            optional = false
+    )
+    @JoinColumn(name = "PRE_DEBT", foreignKey = @ForeignKey(name = "FK_PRE_DEBT_ID"))
+    private Debt preDebtId;
 
 
+    @ManyToOne(
+            fetch = FetchType.LAZY,
+            optional = false
+    )
+    @JoinColumn(name = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_DEPT_ID"))
+    private User user;
 
-    //TODO: Gecikme zammı hesaplanacak, alan tutulacak "transient" olarak. vade tarihi geçince gecikme zammı eklenecek??
-    //TODO: Gecikme zammının  hangi borca bağlı olduğu bilgisi burada tutulmalı.
+    public Debt(Long id, BigDecimal debtAmount, BigDecimal remainingDebtAmount, Date dueDate, String debtType, Debt preDebtId, User user) {
+        this.id = id;
+        this.debtAmount = debtAmount;
+        this.remainingDebtAmount = remainingDebtAmount;
+        this.dueDate = dueDate;
+        this.debtType = debtType;
+        this.preDebtId = preDebtId;
+        this.user = user;
+    }
+
+    public Debt() {
+
+    }
 
     public Long getId() {
         return id;
@@ -71,13 +92,28 @@ public class Debt {
         this.dueDate = dueDate;
     }
 
-
-    public Long getUserId() {
-        return userId;
+    public String getDebtType() {
+        return debtType;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setDebtType(String debtType) {
+        this.debtType = debtType;
+    }
+
+    public Debt getPreDebtId() {
+        return preDebtId;
+    }
+
+    public void setPreDebtId(Debt preDebtId) {
+        this.preDebtId = preDebtId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -87,9 +123,9 @@ public class Debt {
                 ", debtAmount=" + debtAmount +
                 ", remainingDebtAmount=" + remainingDebtAmount +
                 ", dueDate=" + dueDate +
-                ", userId=" + userId +
+                ", debtType='" + debtType + '\'' +
+                ", preDebtId=" + preDebtId +
+                ", user=" + user +
                 '}';
     }
-
-
 }

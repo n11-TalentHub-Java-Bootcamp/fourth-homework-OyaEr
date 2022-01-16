@@ -2,29 +2,21 @@ package com.oyaerdayi.dto;
 
 public class UserDto {
 
-    private Long id;
+    //    private Long id;
     private String name;
     private String surname;
     private String email;
+    private String userName;
     private String phoneNumber;
 
-
-    public UserDto(Long id, String name, String surname, String email, String phoneNumber) {
-        this.id = id;
+    public UserDto(String name, String surname, String email, String userName, String phoneNumber) {
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.userName = userName;
         this.phoneNumber = phoneNumber;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -56,6 +48,14 @@ public class UserDto {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 }

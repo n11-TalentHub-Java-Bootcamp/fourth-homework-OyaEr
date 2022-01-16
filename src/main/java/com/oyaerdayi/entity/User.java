@@ -5,9 +5,8 @@ import javax.persistence.*;
 @Table(name="USER_")
 public class User {
 
-    @SequenceGenerator(name = "generator", sequenceName = "USER_ID_SEQ")
     @Id
-    @GeneratedValue(generator = "generator")
+    @GeneratedValue
     @Column(name = "ID", nullable = false)
     private Long id;
 
@@ -18,11 +17,23 @@ public class User {
     @Column(name = "SURNAME", nullable = false, length = 50)
     private String surname;
 
+
+    @Column(name = "USER_NAME", nullable = false, length = 50)
+    private String userName;
+
     @Column(name = "EMAIL", nullable = false, length = 50)
     private String email;
 
     @Column(name = "PHONE", nullable = false, length = 50)
     private String phoneNumber;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public Long getId() {
         return id;
@@ -70,6 +81,7 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';

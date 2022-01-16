@@ -19,8 +19,8 @@ public class UserService {
         return userDao.save(user);
     }
 
-    public void deleteById(Long id){
-        userDao.deleteById(id);
+    public void deleteByUserName(String userName){
+        userDao.deleteByUserName(userName);
     }
 
     public List<User> findAll(){

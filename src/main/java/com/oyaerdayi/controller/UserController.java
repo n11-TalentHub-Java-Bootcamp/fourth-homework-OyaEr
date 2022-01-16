@@ -33,12 +33,12 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable Long id){
+    @DeleteMapping("/{userName}")
+    public String deleteUser(@PathVariable String userName){
 
         try{
 
-            userService.deleteById(id);
+            userService.deleteByUserName(userName);
             return"User has been deleted.";
 
         }
@@ -47,21 +47,21 @@ public class UserController {
         }
     }
 
-    @PutMapping("")
-    public List<UserDto> update(@RequestBody UserDto userDto){
-
-        User user = UserConverter.INSTANCE.convertAllUserDtoListToUserList(userDto);
-
-        userService.save(user);
-
-        List<User> userList=new ArrayList<User>();
-
-        userList.add(user);
-
-        List<UserDto> userDtoList = UserConverter.INSTANCE.convertAllUserListToUserDtoList(userList);
-
-        return userDtoList;
-    }
+//    @PutMapping("")
+//    public List<UserDto> update(@RequestBody UserDto userDto){
+//
+//        User user = UserConverter.INSTANCE.convertAllUserDtoListToUserList(userDto);
+//
+//        userService.save(user);
+//
+//        List<User> userList=new ArrayList<User>();
+//
+//        userList.add(user);
+//
+//        List<UserDto> userDtoList = UserConverter.INSTANCE.convertAllUserListToUserDtoList(userList);
+//
+//        return userDtoList;
+//    }
 
     @GetMapping("")
     public List<UserDto> findAll(){

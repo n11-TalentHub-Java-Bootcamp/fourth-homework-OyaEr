@@ -10,5 +10,9 @@ import java.util.List;
 public interface DebtDao extends JpaRepository<Debt,Long> {
 
     List<Debt> findAllByUserId(Long userId);
+    List<Debt> findAllById(Long id);
+
+
+
 
 }

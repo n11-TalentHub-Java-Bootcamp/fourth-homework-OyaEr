@@ -7,14 +7,12 @@ import java.util.Date;
 
 public class DebtDto {
 
-    private Long id;
     private BigDecimal debtAmount;
     private BigDecimal remainingDebtAmount;
     private Date dueDate;
     private Long userId;
 
-    public DebtDto(Long id, BigDecimal debtAmount, BigDecimal remainingDebtAmount, Date dueDate, Long userId) {
-        this.id = id;
+    public DebtDto(BigDecimal debtAmount, BigDecimal remainingDebtAmount, Date dueDate, Long userId) {
         this.debtAmount = debtAmount;
         this.remainingDebtAmount = remainingDebtAmount;
         this.dueDate = dueDate;
@@ -22,14 +20,6 @@ public class DebtDto {
     }
 
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public BigDecimal getDebtAmount() {
         return debtAmount;

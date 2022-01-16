@@ -21,12 +21,13 @@ public class DebtService {
     @Autowired
     private DebtDao debtDao;
 
+
     double rateBefore2018 = 1.5; //2018 öncesi için gecikme zammı oranı.
     double rateAfter2018 = 2.0; //2018 sonrası için gecikme zammı oranı.
 
 
-
     public void saveDebt(Debt debt){
+
         debtDao.save(debt);
     }
 
@@ -47,7 +48,7 @@ public class DebtService {
         for (Debt debt : debtList) {
 
             if(date1.compareTo(debt.getDueDate()) < 0 && date2.compareTo(debt.getDueDate()) > 0){
-
+                System.out.println(debt);
                 debtList2.add(debt);
             }
         }
@@ -158,26 +159,26 @@ public class DebtService {
 
                 if(debt.getRemainingDebtAmount().compareTo(BigDecimal.ZERO) != 0){
 
-                if (debt.getDueDate().before(date)) { //2018'ten öncekiler için gecikme zammı
+                    if (debt.getDueDate().before(date)) { //2018'ten öncekiler için gecikme zammı
 
-                    milis = currentDate.getTime() - debt.getDueDate().getTime();
+                        milis = currentDate.getTime() - debt.getDueDate().getTime();
 
-                    long days = TimeUnit.MILLISECONDS.toDays(milis);
+                        long days = TimeUnit.MILLISECONDS.toDays(milis);
 
-                    lateFee = lateFee.add(((debt.getDebtAmount().multiply(new BigDecimal(rateBefore2018))).divide(new BigDecimal(100))).multiply(new BigDecimal(days)));
+                        lateFee = lateFee.add(((debt.getDebtAmount().multiply(new BigDecimal(rateBefore2018))).divide(new BigDecimal(100))).multiply(new BigDecimal(days)));
 
+                    }
+
+                    if (debt.getDueDate().after(date) && debt.getDueDate().before(new Date())) { //2018'ten sonra ama currentDate'ten önce vade tarihi
+
+                        milis = currentDate.getTime() - debt.getDueDate().getTime();
+
+                        long days = TimeUnit.MILLISECONDS.toDays(milis);
+
+                        lateFee = lateFee.add(((debt.getDebtAmount().multiply(new BigDecimal(rateAfter2018))).divide(new BigDecimal(100))).multiply(new BigDecimal(days)));
+
+                    }
                 }
-
-                if (debt.getDueDate().after(date) && debt.getDueDate().before(new Date())) { //2018'ten sonra ama currentDate'ten önce vade tarihi
-
-                    milis = currentDate.getTime() - debt.getDueDate().getTime();
-
-                    long days = TimeUnit.MILLISECONDS.toDays(milis);
-
-                    lateFee = lateFee.add(((debt.getDebtAmount().multiply(new BigDecimal(rateAfter2018))).divide(new BigDecimal(100))).multiply(new BigDecimal(days)));
-
-                }
-            }
 
             }
 
