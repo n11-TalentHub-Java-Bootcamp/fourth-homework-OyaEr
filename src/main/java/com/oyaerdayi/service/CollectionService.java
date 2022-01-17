@@ -30,8 +30,9 @@ public class CollectionService {
     @Autowired
     private DebtDao debtDao;
 
-    double rateBefore2018 = 1.5; //2018 öncesi için gecikme zammı oranı.
-    double rateAfter2018 = 2.0; //2018 sonrası için gecikme zammı oranı.
+
+    double rateBefore2018 = 1.5; 
+    double rateAfter2018 = 2.0;
 
     Debt debt;
     Collection collection;
@@ -138,5 +139,29 @@ public class CollectionService {
         List<CollectionDto> collectionDtoList = CollectionConverter.INSTANCE.convertAllCollectionListToCollectionDtoList(collectionList2);
 
         return collectionDtoList;
+    }
+
+    //UserId'ye göre tahsilatı yapılan borçlar listelendi.
+    public List<DebtDto> getCollectionByUserId(Long userId) {
+
+        List<Debt> debtList = debtDao.findAllByUserId(userId);
+        List<Debt> debtList2 = new ArrayList<>();
+
+
+        for (Debt debt : debtList) {
+
+            try{
+                if(debt.getDebtType().equals("LATE_FEE")){
+                    debtList2.add(debt);
+                }
+            }
+            catch(Exception e){
+                e.getMessage();
+            }
+        }
+
+        List<DebtDto> debtDtoList = DebtConverter.INSTANCE.convertAllDebtListToDebtDtoList(debtList2);
+
+        return debtDtoList;
     }
 }

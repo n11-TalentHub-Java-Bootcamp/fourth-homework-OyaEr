@@ -43,4 +43,12 @@ public class CollectionController {
         return collectionService.getCollectionByDateRange(date1,date2);
     }
 
+    //Kullanıcının tüm tahsilatları.
+    @GetMapping("/{userId}")
+    public List<DebtDto> getCollectionByUserId(@PathVariable Long userId){
+
+        return collectionService.getCollectionByUserId(userId);
+
+    }
+
 }

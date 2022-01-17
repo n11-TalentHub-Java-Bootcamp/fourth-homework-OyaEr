@@ -22,9 +22,6 @@ import java.util.List;
         @Mapping(target = "debtId", source = "debt.id")
         CollectionDto convertAllCollectionListToCollectionDtoList (Collection collectionList);
 
-//        @Mapping(source = "debtId", target = "debt.id")
-//        Collection convertCollectionDtoToCollection(CollectionDto collectionDto);
-
 
         @AfterMapping
         default void setNulls(@MappingTarget final Collection collection, CollectionDto collectionDto) {
