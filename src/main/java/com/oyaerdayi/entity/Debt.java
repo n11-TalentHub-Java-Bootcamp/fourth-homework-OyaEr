@@ -40,7 +40,7 @@ public class Debt implements Serializable {
 
 
     @ManyToOne(
-            fetch = FetchType.LAZY,
+//            fetch = FetchType.LAZY,
             optional = false
     )
     @JoinColumn(name = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_DEPT_ID"))

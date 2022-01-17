@@ -18,6 +18,9 @@ public interface DebtConverter {
     @Mapping(source = "userId", target = "user.id")
     Debt convertAllDebtDtoListToDebtList(DebtDto debtDto);
 
+    @Mapping(target = "userId", source = "user.id")
+    DebtDto convertAllDebtListToDebtDtoList (Debt debtList);
+
 //    @AfterMapping
 //    default void setNulls(@MappingTarget final Debt debt, DebtDto debtDto) {
 //        if (debtDto.getUserId() == null) {

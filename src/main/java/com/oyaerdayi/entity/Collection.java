@@ -22,16 +22,15 @@ public class Collection implements Serializable {
     private Date recordDate;
 
     @OneToOne(
-            fetch = FetchType.LAZY,
             optional = false
     )
     @JoinColumn(name = "DEBT_ID", foreignKey = @ForeignKey(name = "FK_DEBT_COLLECTION_ID"))
-    private Debt debtId;
+    private Debt debt;
 
-    public Collection(Long id, Date recordDate, Debt debtId) {
+    public Collection(Long id, Date recordDate, Debt debt) {
         this.id = id;
         this.recordDate = recordDate;
-        this.debtId = debtId;
+        this.debt = debt;
     }
 
     public Collection(){
@@ -46,8 +45,8 @@ public class Collection implements Serializable {
         return recordDate;
     }
 
-    public Debt getDebtId() {
-        return debtId;
+    public Debt getDebt() {
+        return debt;
     }
 
     public void setId(Long id) {
@@ -58,8 +57,8 @@ public class Collection implements Serializable {
         this.recordDate = recordDate;
     }
 
-    public void setDebtId(Debt debtId) {
-        this.debtId = debtId;
+    public void setDebt(Debt debt) {
+        this.debt = debt;
     }
 
 

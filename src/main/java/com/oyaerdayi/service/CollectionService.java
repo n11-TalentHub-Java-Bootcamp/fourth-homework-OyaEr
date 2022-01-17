@@ -1,7 +1,11 @@
 package com.oyaerdayi.service;
 
+import com.oyaerdayi.converter.CollectionConverter;
+import com.oyaerdayi.converter.DebtConverter;
 import com.oyaerdayi.dao.CollectionDao;
 import com.oyaerdayi.dao.DebtDao;
+import com.oyaerdayi.dto.CollectionDto;
+import com.oyaerdayi.dto.DebtDto;
 import com.oyaerdayi.entity.Collection;
 import com.oyaerdayi.entity.Debt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +43,7 @@ public class CollectionService {
 
             collectionDao.save(collection);
 
-            List<Debt> debtList = debtDao.findAllById(collection.getDebtId().getId());
+            List<Debt> debtList = debtDao.findAllById(collection.getDebt().getId());
 
             Debt debt  = debtList.get(0);
 
@@ -46,11 +51,11 @@ public class CollectionService {
             BigDecimal lateFee= calculateLateFee(debt.getId(),collection.getRecordDate());
 
             Debt debtLateFee= new Debt();
-            debtLateFee.setDebtType("Late_Fee");
+            debtLateFee.setDebtType("LATE_FEE");
             debtLateFee.setPreDebtId(debt);
             debtLateFee.setRemainingDebtAmount(new BigDecimal(0));
             debtLateFee.setDebtAmount(lateFee);
-            debtLateFee.setDueDate(null);
+            debtLateFee.setDueDate(debt.getDueDate());
             debtLateFee.setUser(debt.getUser());
 
             debtDao.save(debtLateFee);
@@ -66,15 +71,14 @@ public class CollectionService {
         }
     }
 
+    //Borç id'sine göre kullanıcının gecikme zammının hesaplanması.
     public BigDecimal calculateLateFee(Long debtId, Date recordDate){
 
         long milis=0;
-        BigDecimal lateFee= new BigDecimal(0);
 
-//        Date currentDate = new Date();
 
         try {
-
+            BigDecimal lateFee= new BigDecimal(0);
             SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = sdformat.parse("2018-01-01");
 
@@ -84,7 +88,7 @@ public class CollectionService {
 
                 if (debt.getRemainingDebtAmount().compareTo(BigDecimal.ZERO) != 0) {
 
-                    if (debt.getDueDate().before(date)) { //2018'ten öncekiler için gecikme zammı
+                    if (debt.getDueDate().before(date) && debt.getDueDate().before(recordDate)) { //2018'ten öncekiler için gecikme zammı
 
                         milis = recordDate.getTime() - debt.getDueDate().getTime();
 
@@ -94,7 +98,7 @@ public class CollectionService {
 
                     }
 
-                    if (debt.getDueDate().after(date) && debt.getDueDate().before(recordDate)) { //2018'ten sonra ama currentDate'ten önce vade tarihi
+                    if (debt.getDueDate().after(date) && debt.getDueDate().before(recordDate)) { //2018'ten sonra ama recordDate'ten önce vade tarihi
 
                         milis = recordDate.getTime() - debt.getDueDate().getTime();
 
@@ -115,5 +119,24 @@ public class CollectionService {
             return new BigDecimal(111);
         }
 
+    }
+
+    public List<CollectionDto> getCollectionByDateRange(Date date1, Date date2){
+
+        List<Collection> collectionList = collectionDao.findAll();
+
+        List <Collection> collectionList2 = new ArrayList<>();
+
+        for (Collection collection : collectionList) {
+
+            if(date1.compareTo(collection.getRecordDate()) < 0 && date2.compareTo(collection.getRecordDate()) > 0){
+                System.out.println(collection);
+                collectionList2.add(collection);
+            }
+        }
+
+        List<CollectionDto> collectionDtoList = CollectionConverter.INSTANCE.convertAllCollectionListToCollectionDtoList(collectionList2);
+
+        return collectionDtoList;
     }
 }
