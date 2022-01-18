@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class DebtController {
     }
 
     @GetMapping("lateFee/{userId}")
-    public String getTotalLateFeeByUserId(@PathVariable Long userId ){
+    public BigDecimal getTotalLateFeeByUserId(@PathVariable Long userId ){
 
         return debtService.getTotalLateFeeByUserId(userId);
     }

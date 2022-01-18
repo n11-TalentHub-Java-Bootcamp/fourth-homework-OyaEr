@@ -31,7 +31,7 @@ public class CollectionService {
     private DebtDao debtDao;
 
 
-    double rateBefore2018 = 1.5; 
+    double rateBefore2018 = 1.5;
     double rateAfter2018 = 2.0;
 
     Debt debt;
@@ -163,5 +163,32 @@ public class CollectionService {
         List<DebtDto> debtDtoList = DebtConverter.INSTANCE.convertAllDebtListToDebtDtoList(debtList2);
 
         return debtDtoList;
+    }
+
+    //Kullanıcının ödediği toplam gecikme zammı.
+    public BigDecimal getTotalLateFeeByUserId(Long userId) {
+
+        List<Debt> debtList = debtDao.findAllByUserId(userId);
+        List<Debt> debtList2 = new ArrayList<>();
+
+                BigDecimal totalLateFee = new BigDecimal(0);
+                for (Debt debt : debtList) {
+                    try{
+                        if (debt.getDebtType().equals("LATE_FEE")) {
+                            debtList2.add(debt);
+                        }
+
+                    }
+                    catch(Exception e){
+                        e.getMessage();
+                    }
+
+                }
+                for (Debt debt2 : debtList2) {
+
+                    totalLateFee = totalLateFee.add(debt2.getDebtAmount());
+
+        }
+                return totalLateFee;
     }
 }

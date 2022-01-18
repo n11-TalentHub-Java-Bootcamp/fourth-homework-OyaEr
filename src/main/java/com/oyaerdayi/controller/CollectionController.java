@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +50,12 @@ public class CollectionController {
 
         return collectionService.getCollectionByUserId(userId);
 
+    }
+
+    @GetMapping("/lateFee/{userId}")
+    public BigDecimal getTotalLateFeeByUserId(@PathVariable Long userId){
+
+        return collectionService.getTotalLateFeeByUserId(userId);
     }
 
 }

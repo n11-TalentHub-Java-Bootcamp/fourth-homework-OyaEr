@@ -141,7 +141,7 @@ public class DebtService {
 
     // Burası hesaplanırken vade tarihi 2018'den önce olanlar için 1.5 oran verilip hangi tarihte ödediyse o güne kadar
     // hep 1.5 oran ile çarpılmıştır. 2018den sonrakiler içinse 2.0 oran verilip ödediği tarihe kadar 2.0 ile çarpılmıştır.
-    public String getTotalLateFeeByUserId(Long userId){
+    public BigDecimal getTotalLateFeeByUserId(Long userId){
 
         long milis=0;
         BigDecimal lateFee= new BigDecimal(0);
@@ -182,12 +182,13 @@ public class DebtService {
 
             }
 
-            return "Total Late Fee: " + lateFee;
+            return  lateFee;
 
         }
         catch (Exception e){
 
-            return e.getMessage();
+             e.getMessage();
+             return null;
         }
 
     }
