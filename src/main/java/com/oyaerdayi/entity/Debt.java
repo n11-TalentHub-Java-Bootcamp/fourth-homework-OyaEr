@@ -28,29 +28,34 @@ public class Debt implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date dueDate;
 
+
+    //borcun oluşturulma tarihi alanı
+    @Column(name = "CREATION_DATE")
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date creationDate;
+
     @Column (name="DEBT_TYPE ")
     private String debtType;
 
     @OneToOne(
             fetch = FetchType.LAZY
-//            optional = false
     )
     @JoinColumn(name = "PRE_DEBT", foreignKey = @ForeignKey(name = "FK_PRE_DEBT_ID"))
     private Debt preDebtId;
 
 
     @ManyToOne(
-//            fetch = FetchType.LAZY,
             optional = false
     )
     @JoinColumn(name = "USER_ID", foreignKey = @ForeignKey(name = "FK_USER_DEPT_ID"))
     private User user;
 
-    public Debt(Long id, BigDecimal debtAmount, BigDecimal remainingDebtAmount, Date dueDate, String debtType, Debt preDebtId, User user) {
+    public Debt(Long id, BigDecimal debtAmount, BigDecimal remainingDebtAmount, Date dueDate, Date creationDate, String debtType, Debt preDebtId, User user) {
         this.id = id;
         this.debtAmount = debtAmount;
         this.remainingDebtAmount = remainingDebtAmount;
         this.dueDate = dueDate;
+        this.creationDate = creationDate;
         this.debtType = debtType;
         this.preDebtId = preDebtId;
         this.user = user;
@@ -58,6 +63,14 @@ public class Debt implements Serializable {
 
     public Debt() {
 
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public Long getId() {

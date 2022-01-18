@@ -28,6 +28,7 @@ public class DebtService {
 
     public void saveDebt(Debt debt){
 
+        debt.setDebtType("NORMAL");
         debtDao.save(debt);
     }
 

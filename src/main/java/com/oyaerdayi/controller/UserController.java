@@ -1,6 +1,7 @@
 package com.oyaerdayi.controller;
 
 import com.oyaerdayi.converter.UserConverter;
+import com.oyaerdayi.dao.UserDao;
 import com.oyaerdayi.dto.UserDto;
 import com.oyaerdayi.entity.User;
 import com.oyaerdayi.service.UserService;
@@ -17,19 +18,35 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserDao userDao;
+
     @PostMapping("")
-    public void saveUser(@RequestBody UserDto userDto){
+    public String saveUser(@RequestBody UserDto userDto){
 
         try {
-
             User user = UserConverter.INSTANCE.convertAllUserDtoListToUserList(userDto);
 
-            user = userService.save(user);
+            List<User> userList = userDao.findAll();
 
+            if(userList.size()==0){
+
+                userDao.save(user);
+            }
+
+            for (User user1 : userList) {
+                if(user.getUserName().equals(user1.getUserName())){
+
+                    return "This username already exists. Please try another username.";
+
+                }
+            }
+
+            user = userService.save(user);
+            return "User successfully saved.";
         }
         catch(Exception e){
-
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
     }
 

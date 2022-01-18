@@ -3,19 +3,20 @@ package com.oyaerdayi.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
-//Bu dto save,delete vs metotları için yapılmıştır. Update metodu için farklı bir dto kullanılacaktır.
 
 public class DebtDto {
 
     private BigDecimal debtAmount;
     private BigDecimal remainingDebtAmount;
     private Date dueDate;
+    private Date creationDate;
     private Long userId;
 
-    public DebtDto(BigDecimal debtAmount, BigDecimal remainingDebtAmount, Date dueDate, Long userId) {
+    public DebtDto(BigDecimal debtAmount, BigDecimal remainingDebtAmount, Date dueDate, Date creationDate, Long userId) {
         this.debtAmount = debtAmount;
         this.remainingDebtAmount = remainingDebtAmount;
         this.dueDate = dueDate;
+        this.creationDate=creationDate;
         this.userId = userId;
     }
 
@@ -51,5 +52,13 @@ public class DebtDto {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 }
