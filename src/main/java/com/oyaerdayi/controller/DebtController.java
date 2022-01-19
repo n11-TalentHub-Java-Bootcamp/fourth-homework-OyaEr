@@ -21,14 +21,20 @@ public class DebtController {
 
 
     @PostMapping("")
-    public String saveDebt(@RequestBody DebtDto debtDto){ //TODO: userId ve id kontrolü yapılması lazım.
+    public String saveDebt(@RequestBody DebtDto debtDto){
 
         try{
             Debt debt = DebtConverter.INSTANCE.convertAllDebtDtoListToDebtList(debtDto);
 
-            debtService.saveDebt(debt);
+            if(debt.getDebtAmount().compareTo(debt.getRemainingDebtAmount())==0){
+                debtService.saveDebt(debt);
 
-            return "Debt was successfully saved.";
+                return "Debt was successfully saved.";
+            }
+            else{
+
+                return "Debt not saved. debtAmount and remainingDebtAmount should be same.";
+            }
 
         }
         catch (Exception e){
@@ -77,8 +83,4 @@ public class DebtController {
 
         return debtService.getTotalLateFeeByUserId(userId);
     }
-
-
-
-
 }
