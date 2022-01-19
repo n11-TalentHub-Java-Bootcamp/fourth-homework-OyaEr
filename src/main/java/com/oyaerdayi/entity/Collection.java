@@ -1,5 +1,7 @@
 package com.oyaerdayi.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -19,6 +21,8 @@ public class Collection implements Serializable {
 
     //Kayıt tarihi = Tahsilat yapılan tarih
     @Column(name = "RECORD_DATE")
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date recordDate;
 
     @OneToOne(

@@ -25,12 +25,14 @@ public class Debt implements Serializable {
 
     //vade tarihi alanı
     @Column(name = "DUE_DATE")
+    @Temporal(TemporalType.DATE)
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date dueDate;
 
 
     //borcun oluşturulma tarihi alanı
     @Column(name = "CREATION_DATE")
+    @Temporal(TemporalType.DATE)
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date creationDate;
 
