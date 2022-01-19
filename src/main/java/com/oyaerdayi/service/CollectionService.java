@@ -54,6 +54,7 @@ public class CollectionService {
             debtLateFee.setPreDebtId(debt);
             debtLateFee.setRemainingDebtAmount(new BigDecimal(0));
             debtLateFee.setDebtAmount(lateFee);
+            debtLateFee.setCreationDate(collection.getRecordDate());
             debtLateFee.setDueDate(debt.getDueDate());
             debtLateFee.setUser(debt.getUser());
 
@@ -120,6 +121,7 @@ public class CollectionService {
 
     }
 
+    //Belirtilen tarihler arası yapılan tahsilatlar.
     public List<CollectionDto> getCollectionByDateRange(Date date1, Date date2){
 
         List<Collection> collectionList = collectionDao.findAll();
@@ -139,7 +141,7 @@ public class CollectionService {
         return collectionDtoList;
     }
 
-    //UserId'ye göre tahsilatı yapılan borçlar listelendi.
+    //UserId'ye göre tahsilatı yapılan borçlar listelendi. Debt tipinde Late_Fee type'ı olanlar dönüldü.
     public List<DebtDto> getCollectionByUserId(Long userId) {
 
         List<Debt> debtList = debtDao.findAllByUserId(userId);
