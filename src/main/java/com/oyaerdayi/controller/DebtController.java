@@ -37,11 +37,11 @@ public class DebtController {
         }
     }
 
-    //Belirtilen tarihler arası borçlar listelenebilmelidir.
+    //Belirtilen tarihler arası oluşturulan borçlar listelenebilmelidir.
     @GetMapping("dateRange/{date1}/{date2}")
-    public List<DebtDto> getDebtByDateRange(@PathVariable ("date1") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)Date date1, @PathVariable ("date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date2 ){
+    public List<DebtDto> getDebtByCreationDateRange(@PathVariable ("date1") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)Date date1, @PathVariable ("date2") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date2 ){
 
-        return debtService.getDebtByDateRange(date1,date2);
+        return debtService.getDebtByCreationDateRange(date1,date2);
     }
 
     //Bir kullanıcının tüm borçlarını listeleye metot(borç tutarı sıfırdan büyük olanlar,yani tahsilatı yapılmamış)

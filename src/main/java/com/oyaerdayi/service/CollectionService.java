@@ -34,8 +34,6 @@ public class CollectionService {
     double rateBefore2018 = 1.5;
     double rateAfter2018 = 2.0;
 
-    Debt debt;
-    Collection collection;
 
     //Burada tahsilat yapıyoruz.
     public void saveCollection( Collection collection){

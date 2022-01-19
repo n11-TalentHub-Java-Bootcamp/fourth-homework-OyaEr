@@ -32,25 +32,21 @@ public class DebtService {
         debtDao.save(debt);
     }
 
-//    if (date1.compareTo(date2) > 0) {
-//        System.out.println("Date1 is after Date2");
-//    } else if (date1.compareTo(date2) < 0) {
-//        System.out.println("Date1 is before Date2");
-//    } else {
-//        System.out.println("Date1 is equal to Date2");
-//    }
 
-    public List<DebtDto> getDebtByDateRange(Date date1, Date date2){
+    public List<DebtDto> getDebtByCreationDateRange(Date date1, Date date2){
 
         List<Debt> debtList = debtDao.findAll();
 
         List <Debt> debtList2 = new ArrayList<>();
 
+
         for (Debt debt : debtList) {
 
-            if(date1.compareTo(debt.getDueDate()) < 0 && date2.compareTo(debt.getDueDate()) > 0){
-                System.out.println(debt);
-                debtList2.add(debt);
+            if(debt.getCreationDate()!=null){
+                if(date1.compareTo(debt.getCreationDate()) < 0 && date2.compareTo(debt.getCreationDate()) > 0){
+                    System.out.println(debt);
+                    debtList2.add(debt);
+                }
             }
         }
 
@@ -101,10 +97,12 @@ public class DebtService {
 
     }
 
+    //Bir kullanıcının toplam borç tutarı. Gecikme zammı dahildir.
     public String getTotalDebtByUserId(Long userId){
 
         BigDecimal totalDebt = new BigDecimal(0);
         BigDecimal zero = new BigDecimal(0);
+        BigDecimal lateFee = new BigDecimal(0);
 
         List<Debt> debtList = debtDao.findAllByUserId(userId);
 
@@ -116,7 +114,10 @@ public class DebtService {
             }
         }
 
-        return "Remaining Total Debt: " + totalDebt;
+        lateFee= getTotalLateFeeByUserId(userId);
+        totalDebt = totalDebt.add(lateFee);
+
+        return "Remaining Total Debt with Late Fee: " + totalDebt;
 
     }
 
@@ -124,6 +125,7 @@ public class DebtService {
 
         BigDecimal totalDebt = new BigDecimal(0);
         BigDecimal zero = new BigDecimal(0);
+        BigDecimal lateFee = new BigDecimal(0);
 
         List<Debt> debtList = debtDao.findAllByUserId(userId);
 
@@ -136,7 +138,10 @@ public class DebtService {
 
             }
         }
-        return "Remaining Total Debt Out Of Due Date: " + totalDebt;
+
+        lateFee= getTotalLateFeeByUserId(userId);
+        totalDebt = totalDebt.add(lateFee);
+        return "Remaining Total Debt Out Of Due Date (with Late Fee): " + totalDebt;
 
     }
 
@@ -166,17 +171,17 @@ public class DebtService {
 
                         long days = TimeUnit.MILLISECONDS.toDays(milis);
 
-                        lateFee = lateFee.add(((debt.getDebtAmount().multiply(new BigDecimal(rateBefore2018))).divide(new BigDecimal(100))).multiply(new BigDecimal(days)));
+                        lateFee = lateFee.add((((debt.getDebtAmount().multiply(new BigDecimal(rateBefore2018))).divide(new BigDecimal(100))).multiply(new BigDecimal(days))));
 
                     }
 
-                    if (debt.getDueDate().after(date) && debt.getDueDate().before(new Date())) { //2018'ten sonra ama currentDate'ten önce vade tarihi
+                    if (debt.getDueDate().after(date) && debt.getDueDate().before(currentDate)){ //2018'ten sonra ama currentDate'ten önce vade tarihi
 
                         milis = currentDate.getTime() - debt.getDueDate().getTime();
 
                         long days = TimeUnit.MILLISECONDS.toDays(milis);
 
-                        lateFee = lateFee.add(((debt.getDebtAmount().multiply(new BigDecimal(rateAfter2018))).divide(new BigDecimal(100))).multiply(new BigDecimal(days)));
+                        lateFee = lateFee.add((((debt.getDebtAmount().multiply(new BigDecimal(rateAfter2018))).divide(new BigDecimal(100))).multiply(new BigDecimal(days))));
 
                     }
                 }
